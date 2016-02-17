@@ -39,6 +39,7 @@ public class MySqlDBStrategy implements DBStrategy{
          * @param upperLimit Max number of records to be retrieved
          * @return An ArrayList populated with records from a database in the form of a Map
          */
+        @Override
         public List<Map<String,Object>> findAllRecords(String tableName, int upperLimit) throws SQLException{
             List<Map<String,Object>> records=new ArrayList();
             String sqlQuery=(upperLimit>0)?"SELECT * FROM "+tableName+" LIMIT "+upperLimit:"SELECT * FROM "+tableName;
@@ -61,6 +62,7 @@ public class MySqlDBStrategy implements DBStrategy{
             return records;
         }
         
+        @Override
     public void createRecord(String tableName, List<Object> columns, List<Object> values) throws ClassNotFoundException, SQLException {
         StringBuilder sb = new StringBuilder("INSERT INTO " + tableName + " (");
         for (Object col : columns) {
