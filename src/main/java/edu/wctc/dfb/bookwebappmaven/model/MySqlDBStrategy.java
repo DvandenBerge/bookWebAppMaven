@@ -2,6 +2,7 @@ package edu.wctc.dfb.bookwebappmaven.model;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
@@ -60,5 +61,25 @@ public class MySqlDBStrategy implements DBStrategy{
             return records;
         }
         
+    public void createRecord(String tableName, List<Object> columns, List<Object> values) throws ClassNotFoundException, SQLException {
+        StringBuilder sb = new StringBuilder("INSERT INTO " + tableName + " (");
+        for (Object col : columns) {
+            sb.append(col).append(",");
+        }
+        sb = sb.deleteCharAt(sb.length() - 1);
+        sb.append(") VALUES (");
+        for (Object val : values) {
+            sb.append("?,");
+        }
+        sb = sb.deleteCharAt(sb.length() - 1);
+        sb.append(")");
 
+        PreparedStatement pStmt = connection.prepareStatement(sb.toString());
+
+        for (int i = 0; i < values.size(); i++) {
+            pStmt.setObject(i + 1, values.get(i));
+        }
+
+        pStmt.executeUpdate();
+    }
 }
