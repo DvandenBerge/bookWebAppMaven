@@ -63,16 +63,18 @@ public class MySqlDBStrategy implements DBStrategy{
         }
         
         @Override
-    public void createRecord(String tableName, List<Object> columns, List<Object> values) throws ClassNotFoundException, SQLException {
+    public void createRecord(String tableName, List<Object> columns, List<Object> values) throws SQLException {
         StringBuilder sb = new StringBuilder("INSERT INTO " + tableName + " (");
         for (Object col : columns) {
             sb.append(col).append(",");
         }
+        //delete end comma
         sb = sb.deleteCharAt(sb.length() - 1);
         sb.append(") VALUES (");
         for (Object val : values) {
             sb.append("?,");
         }
+        //delete end comma
         sb = sb.deleteCharAt(sb.length() - 1);
         sb.append(")");
 
