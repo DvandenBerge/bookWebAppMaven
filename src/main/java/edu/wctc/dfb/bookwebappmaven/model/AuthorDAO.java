@@ -46,4 +46,17 @@ public class AuthorDAO implements AuthorDAOStrategy {
         return authors;
     }
     
+    @Override
+    public void deleteRecordById(String tableName, String pkColumn, Object value) throws ClassNotFoundException, SQLException{
+        db.openConnection(DRIVER,URL,USERNAME,PASSWORD);
+        db.deleteRecordById(tableName,pkColumn,value);
+        db.closeConnection();
+    }
+    
+    public void updateRecordById(String tableName, List colDescriptors, List colValues,
+                             String whereField, Object whereValue, boolean closeConnection)throws SQLException, Exception{
+         db.openConnection(DRIVER,URL,USERNAME,PASSWORD);
+         db.updateRecordById(tableName, colDescriptors, colValues, whereField, whereValue, closeConnection);
+         db.closeConnection();
+    }
 }

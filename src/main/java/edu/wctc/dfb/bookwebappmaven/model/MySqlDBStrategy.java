@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -86,4 +87,70 @@ public class MySqlDBStrategy implements DBStrategy{
 
         pStmt.executeUpdate();
     }
+    
+    @Override
+ public int updateRecordById(String tableName, List colDescriptors, List colValues,
+                             String whereField, Object whereValue, boolean closeConnection)
+                             throws SQLException, Exception
+    {
+        PreparedStatement pstmt = null;
+        int recsUpdated = 0;
+
+        // do this in an excpetion handler so that we can depend on the
+        // finally clause to close the connection
+        try {
+                    pstmt = buildUpdateStatement(connection,tableName,colDescriptors,whereField);
+
+                    final Iterator i=colValues.iterator();
+                    int index = 1;
+                    Object obj = null;
+
+                    // set params for column values
+                    while( i.hasNext()) {
+                        obj = i.next();
+                        pstmt.setObject(index++, obj);
+                    }
+                    // and finally set param for wehere value
+                    pstmt.setObject(index,whereValue);
+                    
+                    recsUpdated = pstmt.executeUpdate();
+
+        } catch (SQLException sqle) {
+            throw sqle;
+        } catch (Exception e) {
+            throw e;
+        } finally {
+                    try {
+                            pstmt.close();
+                            if(closeConnection) connection.close();
+                    } catch(SQLException e) {
+                            throw e;
+                    } // end try
+        } // end finally
+
+        return recsUpdated;
+       }
+ 
+    @Override
+    public int deleteRecordById(String tableName, String pkColumn, Object value) throws SQLException{
+        String sqlQuery="DELETE FROM "+tableName+" WHERE "+pkColumn+" = ?";
+        PreparedStatement pStmt = connection.prepareStatement(sqlQuery);
+        pStmt.setObject(1,value);
+        int result=pStmt.executeUpdate();
+        return result;
+    }
+ 
+ private PreparedStatement buildUpdateStatement(Connection c, String tableName, List colDescriptors,String whereField) throws SQLException{
+    StringBuffer sql = new StringBuffer("UPDATE ");
+		(sql.append(tableName)).append(" SET ");
+		final Iterator i=colDescriptors.iterator();
+		while( i.hasNext() ) {
+			(sql.append( (String)i.next() )).append(" = ?, ");
+		}
+		sql = new StringBuffer( (sql.toString()).substring( 0,(sql.toString()).lastIndexOf(", ") ) );
+		((sql.append(" WHERE ")).append(whereField)).append(" = ?");
+		final String finalSQL=sql.toString();
+		return c.prepareStatement(finalSQL);
+ }
+
 }

@@ -14,6 +14,8 @@ import java.util.List;
  */
 public interface AuthorDAOStrategy {
 
-    List<Author> getAuthorList() throws ClassNotFoundException, SQLException;
-    
+    public abstract List<Author> getAuthorList() throws ClassNotFoundException, SQLException;
+    public abstract void deleteRecordById(String tableName, String pkColumn, Object value) throws ClassNotFoundException, SQLException;
+    public abstract void updateRecordById(String tableName, List colDescriptors, List colValues,
+                             String whereField, Object whereValue, boolean closeConnection)throws SQLException, Exception;
 }
