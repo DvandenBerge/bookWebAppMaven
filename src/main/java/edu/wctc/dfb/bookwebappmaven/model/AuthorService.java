@@ -15,13 +15,13 @@ public class AuthorService {
         return authorDAO.getAuthorList();
     }
     
-    public void updateRecord(String tableName, List colDescriptors, List colValues,
+    public void updateAuthor(String tableName, List colDescriptors, List colValues,
                              String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception{
        authorDAO.updateRecordById(tableName, colDescriptors, colValues, whereField, whereValue, closeConnection);
     }
     
-    public void deleteRecord(String tableName, String pkColumn, Object value ) throws ClassNotFoundException,SQLException{
-        authorDAO.deleteRecordById(tableName, pkColumn, value);
+    public void deleteAuthorById(Object value ) throws ClassNotFoundException,SQLException{
+        authorDAO.deleteAuthorById(value);
     }
     public static void main(String[] args) throws Exception,SQLException{
         AuthorService serv1=new AuthorService();
@@ -31,7 +31,7 @@ public class AuthorService {
         cd.add("author_name");
         List v=new ArrayList();
         v.add("Dan lol");
-        serv1.updateRecord("author", cd, v, "author_name", "Kyle Wertz", true);
+        serv1.updateAuthor("author", cd, v, "author_name", "Kyle Wertz", true);
         System.out.println(serv1.getAuthorList());
         
     }

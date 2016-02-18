@@ -20,6 +20,7 @@ public class AuthorDAO implements AuthorDAOStrategy {
     private final String USERNAME="root";
     
     private final String TABLE_NAME="author";
+    private final String COLUMN_NAME="author_id";
     private final int RESULTS_TO_RETURN=-1;
     private final String NULL_STRING_ENTRY ="NOT ENTERED";
     
@@ -47,16 +48,17 @@ public class AuthorDAO implements AuthorDAOStrategy {
     }
     
     @Override
-    public void deleteRecordById(String tableName, String pkColumn, Object value) throws ClassNotFoundException, SQLException{
+    public int deleteAuthorById(Object value) throws ClassNotFoundException, SQLException{
         db.openConnection(DRIVER,URL,USERNAME,PASSWORD);
-        db.deleteRecordById(tableName,pkColumn,value);
+        int returnValue=db.deleteRecordById(TABLE_NAME,COLUMN_NAME,value);
         db.closeConnection();
+        return returnValue;
     }
     
     public void updateRecordById(String tableName, List colDescriptors, List colValues,
                              String whereField, Object whereValue, boolean closeConnection)throws SQLException, Exception{
          db.openConnection(DRIVER,URL,USERNAME,PASSWORD);
-         db.updateRecordById(tableName, colDescriptors, colValues, whereField, whereValue, closeConnection);
+         db.updateRecordById(TABLE_NAME, colDescriptors, colValues, whereField, whereValue, closeConnection);
          db.closeConnection();
     }
 }
