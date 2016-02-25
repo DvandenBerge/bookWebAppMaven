@@ -18,4 +18,13 @@ public interface AuthorDAOStrategy {
     public abstract int deleteAuthorById(Object value) throws ClassNotFoundException, SQLException;
     public abstract void updateRecordById(String tableName, List colDescriptors, List colValues,
                              String whereField, Object whereValue, boolean closeConnection)throws SQLException, Exception;
+     public abstract void initDAO(String driver,String url,String username,String password);
+         public abstract void setPassword(String password);
+    public abstract void setUrl(String url);
+    public abstract void setUsername(String username);
+    public abstract void setDriver(String driver);
+    public abstract String getDriver();
+    public abstract String getUsername();
+    public abstract String getPassword();
+    public abstract String getUrl();
 }

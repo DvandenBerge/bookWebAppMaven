@@ -12,14 +12,20 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import javax.enterprise.context.Dependent;
 
 /**
  *
  * @author dvandenberge
  */
+    @Dependent
 public class MySqlDBStrategy implements DBStrategy{
-    private Connection connection;
-    
+
+        private Connection connection;
+        
+         public MySqlDBStrategy(){
+         }
+            
         @Override
         public void openConnection(String driverName,String url,String username, String password) throws ClassNotFoundException,SQLException{
            Class.forName(driverName);
@@ -153,4 +159,6 @@ public class MySqlDBStrategy implements DBStrategy{
 		return c.prepareStatement(finalSQL);
  }
 
+ 
+ 
 }

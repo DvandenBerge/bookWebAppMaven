@@ -1,32 +1,47 @@
 package edu.wctc.dfb.bookwebappmaven.model;
 
+import java.io.Serializable;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import javax.enterprise.context.Dependent;
+import javax.inject.Inject;
 
 /**
  *
  * @author dvandenberge
- */
-public class AuthorDAO implements AuthorDAOStrategy {
+ */ 
+@Dependent
+public class AuthorDAO implements AuthorDAOStrategy,Serializable {
+    @Inject
+    private DBStrategy db;
     
-    private DBStrategy db=new MySqlDBStrategy();
-    
-    private final String DRIVER="com.mysql.jdbc.Driver";
-    private final String URL= "jdbc:mysql://localhost:3306/books";
-    private final String PASSWORD="admin";
-    private final String USERNAME="root";
+    private String driver;
+    private String url;
+    private String password;
+    private String username;
     
     private final String TABLE_NAME="author";
     private final String COLUMN_NAME="author_id";
     private final int RESULTS_TO_RETURN=-1;
     private final String NULL_STRING_ENTRY ="NOT ENTERED";
     
+    public AuthorDAO(){
+    }
+    
+    @Override
+     public void initDAO(String driver,String url,String username,String password){
+         setDriver(driver);
+         setUrl(url);
+         setUsername(username);
+         setPassword(password);
+     }
+    
     @Override
     public List<Author> getAuthorList() throws ClassNotFoundException,SQLException{
-        db.openConnection(DRIVER,URL,USERNAME,PASSWORD);
+        db.openConnection(driver,url,username,password);
         
         List authors=new ArrayList();
         List<Map<String,Object>> rawData=db.findAllRecords(TABLE_NAME, RESULTS_TO_RETURN);
@@ -49,7 +64,7 @@ public class AuthorDAO implements AuthorDAOStrategy {
     
     @Override
     public int deleteAuthorById(Object value) throws ClassNotFoundException, SQLException{
-        db.openConnection(DRIVER,URL,USERNAME,PASSWORD);
+        db.openConnection(driver,url,username,password);
         int returnValue=db.deleteRecordById(TABLE_NAME,COLUMN_NAME,value);
         db.closeConnection();
         return returnValue;
@@ -57,8 +72,45 @@ public class AuthorDAO implements AuthorDAOStrategy {
     
     public void updateRecordById(String tableName, List colDescriptors, List colValues,
                              String whereField, Object whereValue, boolean closeConnection)throws SQLException, Exception{
-         db.openConnection(DRIVER,URL,USERNAME,PASSWORD);
+         db.openConnection(driver,url,username,password);
          db.updateRecordById(TABLE_NAME, colDescriptors, colValues, whereField, whereValue, closeConnection);
          db.closeConnection();
     }
+
+    public DBStrategy getDb() {
+        return db;
+    }
+    public void setDb(DBStrategy db) {
+        this.db = db;
+    }
+
+    public String getDriver() {
+        return driver;
+    }
+    public void setDriver(String driver) {
+        this.driver = driver;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+    public void setUsername(String username) {
+        this.username = username;
+    }
+    
+    
 }
