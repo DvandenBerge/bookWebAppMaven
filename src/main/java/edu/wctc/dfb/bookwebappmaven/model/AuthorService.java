@@ -40,17 +40,4 @@ public class AuthorService implements Serializable {
     }
     
     
-    
-    public static void main(String[] args) throws Exception,SQLException{
-        AuthorService serv1=new AuthorService();
-        System.out.println(serv1.getAuthorList());
-        //serv1.deleteRecord("author","author_id",2);
-        List cd=new ArrayList();
-        cd.add("author_name");
-        List v=new ArrayList();
-        v.add("Dan lol");
-        serv1.updateAuthor("author", cd, v, "author_name", "Kyle Wertz", true);
-        System.out.println(serv1.getAuthorList());
-        
-    }
 }

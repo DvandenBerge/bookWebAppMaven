@@ -20,6 +20,7 @@
     <body>
         <h1>Results!</h1>
         
+        
         <table>
             <tr>
                 <th>Author Name</th>
@@ -40,7 +41,9 @@
                 </td>
             </tr>
         </c:forEach>
+            
         </table>
+        
         
         
             
