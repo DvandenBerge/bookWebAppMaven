@@ -13,35 +13,37 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Edit Page</title>
     </head>
     <body>
         <h1>Make edits here!</h1>
         
+ <form method="POST" action="AuthorController?action=editAuthor">
         <table>
             <tr>
                 <th>Author Name</th>
                 <th>Author Id</th>
                 <th>Date Added</th>
+                <th>EDIT</th>
             </tr>
-
-        <c:forEach items="${authorList}" var="author" begin="0" end="${endOfList}">
-            <tr>
-                <td>
-                    <c:out value="${author.getAuthorName()}"/>
-                </td>
-                <td>
-                    <c:out value="${author.getAuthorId()}"/>
-                </td>
-                <td>
-                    <c:out value="${author.getDateAdded()}"/>
-                </td>
-                <td><button>edit</button></td>
-            </tr>
-        </c:forEach>
-            
+           
+                <c:forEach items="${authorList}" var="author" begin="0" end="${endOfList}">
+                    <tr>
+                        <td>
+                            <c:out value="${author.getAuthorName()}"/>
+                        </td>
+                        <td>
+                            <c:out value="${author.getAuthorId()}"/>
+                        </td>
+                        <td>
+                            <c:out value="${author.getDateAdded()}"/>
+                        </td>
+                        <td><input type="submit" value="${author.getAuthorId()}" name="authorID"></td>
+                    </tr>
+                </c:forEach>
+           
         </table>
-        
-        
+</form> 
+
     </body>
 </html>

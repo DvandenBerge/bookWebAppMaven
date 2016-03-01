@@ -2,6 +2,8 @@ package edu.wctc.dfb.bookwebappmaven.controller;
 
 import edu.wctc.dfb.bookwebappmaven.model.AuthorService;
 import java.io.IOException;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
@@ -50,9 +52,29 @@ public class AuthorController extends HttpServlet {
                     destPage = "/authorList.jsp";
                     break;
                 case "delete":
-                case "update":
+                    destPage="/deleteList.jsp";
+                    break;
+                case "update": 
+                     destPage = "/editList.jsp";
+                    break;
                 case "create":
-                    destPage = "/editPage.jsp";
+                    destPage = "";
+                    break;
+                case "editAuthor":
+                     String[] authorIdToEdit=request.getParameterValues("authorID");
+                     request.setAttribute("authorToEdit", authorService.getAuthorList().get(Integer.parseInt(authorIdToEdit[0])-1)) ;
+                    destPage="/editAuthor.jsp";
+                    break;
+                case "deleteAuthor":
+                    String[] authorIdToDelete=request.getParameterValues("authorID");
+                    authorService.deleteAuthorById(authorIdToDelete[0]);
+                    destPage="/authorList.jsp";
+                    break;
+                case "Save":
+                    String newName=request.getParameter("authorName");
+                    int authorId=Integer.parseInt(request.getParameter("authorId"));
+                    editEntry(authorId,newName);
+                    destPage="/authorList.jsp";
                     break;
             }
 
@@ -82,6 +104,14 @@ public class AuthorController extends HttpServlet {
         password = getServletContext().getInitParameter("db.password");
     }
 
+private void editEntry(int id, String name) throws SQLException,Exception{
+        ArrayList a=new ArrayList();
+        ArrayList b=new ArrayList();
+        a.add("author_name");
+        b.add(name);
+        authorService.updateAuthor("author", a,b, "author_id" , id , false);
+    }
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
