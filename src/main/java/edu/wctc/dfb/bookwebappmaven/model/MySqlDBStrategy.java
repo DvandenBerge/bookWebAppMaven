@@ -146,6 +146,24 @@ public class MySqlDBStrategy implements DBStrategy{
         return result;
     }
  
+    public Map<String,Object> findRecordById(String table, String pkField, Object value) throws SQLException{
+        String sqlQuery="SELECT * FROM "+table+" WHERE "+pkField+" = ?";
+        PreparedStatement pStmt = connection.prepareStatement(sqlQuery);
+        pStmt.setObject(1, value);
+        ResultSet rs = pStmt.executeQuery();
+        
+        ResultSetMetaData rsmd=rs.getMetaData();
+        Map<String,Object> record= new HashMap();
+        if(rs.next()){
+            int fieldNumber=rsmd.getColumnCount();
+            for(int i=1;i<=fieldNumber;i++){
+                record.put(rsmd.getColumnName(i), rs.getObject(i));
+            }
+        }
+        pStmt.close();
+        return record;
+    }
+    
  private PreparedStatement buildUpdateStatement(Connection c, String tableName, List colDescriptors,String whereField) throws SQLException{
     StringBuffer sql = new StringBuffer("UPDATE ");
 		(sql.append(tableName)).append(" SET ");

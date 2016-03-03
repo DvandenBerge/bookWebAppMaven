@@ -17,5 +17,5 @@ public interface DBStrategy {
     public abstract int deleteRecordById(String tableName, String pkColumn, Object value) throws SQLException;
     public abstract int updateRecordById(String tableName, List colDescriptors, List colValues,String whereField, 
                 Object whereValue, boolean closeConnection) throws SQLException, Exception;
-
+    public abstract Map<String,Object> findRecordById(String table, String pkField, Object value) throws SQLException;
 }

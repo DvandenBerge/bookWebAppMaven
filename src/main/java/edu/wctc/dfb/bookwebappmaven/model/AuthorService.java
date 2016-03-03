@@ -22,15 +22,31 @@ public class AuthorService implements Serializable {
         return authorDAO.getAuthorList();
     }
     
-    public void updateAuthor(String tableName, List colDescriptors, List colValues,
+    private  void editEntry(String tableName, List colDescriptors, List colValues,
                              String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception{
        authorDAO.updateRecordById(tableName, colDescriptors, colValues, whereField, whereValue, closeConnection);
+    }
+    
+    public void createAuthor(Object value) throws ClassNotFoundException,SQLException{
+        authorDAO.createAuthor(value);
     }
     
     public void deleteAuthorById(Object value ) throws ClassNotFoundException,SQLException{
         authorDAO.deleteAuthorById(value);
     }
 
+    public void updateAuthor(int id, String name) throws SQLException,Exception{
+        ArrayList a=new ArrayList();
+        ArrayList b=new ArrayList();
+        a.add("author_name");
+        b.add(name);
+       editEntry("author", a,b, "author_id" , id , true);
+    }
+    
+    public Author findAuthorById(int authorID) throws SQLException,ClassNotFoundException{
+        return authorDAO.findAuthorById(authorID);
+    }
+    
     public AuthorDAOStrategy getAuthorDAO() {
         return authorDAO;
     }

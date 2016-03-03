@@ -62,6 +62,33 @@ public class AuthorDAO implements AuthorDAOStrategy,Serializable {
         return authors;
     }
     
+    public Author findAuthorById(int authorID) throws SQLException,ClassNotFoundException{
+        db.openConnection(driver, url, username, password);
+        
+        Map<String,Object> rawRec = db.findRecordById("author", "author_id", authorID);
+        Author author = new Author();
+        author.setAuthorId((Integer)rawRec.get("author_id"));
+        author.setAuthorName(rawRec.get("author_name").toString());
+        author.setDateAdded((Date)rawRec.get("date_added"));
+        db.closeConnection();
+        
+        return author;
+    }
+    
+    @Override
+    public void createAuthor(Object value) throws ClassNotFoundException, SQLException{
+        db.openConnection(driver, url, username, password);
+        ArrayList a=new ArrayList();
+        ArrayList b=new ArrayList();
+        Date today=new Date();
+        a.add(value);
+        a.add(today);
+        b.add("author_name");
+        b.add("date_added");
+        db.createRecord(TABLE_NAME, b, a);
+        db.closeConnection();
+    }
+    
     @Override
     public int deleteAuthorById(Object value) throws ClassNotFoundException, SQLException{
         db.openConnection(driver,url,username,password);
@@ -70,6 +97,7 @@ public class AuthorDAO implements AuthorDAOStrategy,Serializable {
         return returnValue;
     }
     
+    @Override
     public void updateRecordById(String tableName, List colDescriptors, List colValues,
                              String whereField, Object whereValue, boolean closeConnection)throws SQLException, Exception{
          db.openConnection(driver,url,username,password);

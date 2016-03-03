@@ -12,23 +12,25 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="styles.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Edit Page</title>
     </head>
     <body>
         <h1>Make edits here!</h1>
         
- <form method="POST" action="AuthorController?action=editAuthor">
+ <form method="POST" action="AuthorController">
         <table>
             <tr>
+                <th>Selection</th>
                 <th>Author Name</th>
                 <th>Author Id</th>
                 <th>Date Added</th>
-                <th>EDIT</th>
             </tr>
            
                 <c:forEach items="${authorList}" var="author" begin="0" end="${endOfList}">
                     <tr>
+                        <td><input type="radio" name="authorID" value="${author.getAuthorId()}"></td>
                         <td>
                             <c:out value="${author.getAuthorName()}"/>
                         </td>
@@ -37,12 +39,13 @@
                         </td>
                         <td>
                             <c:out value="${author.getDateAdded()}"/>
-                        </td>
-                        <td><input type="submit" value="${author.getAuthorId()}" name="authorID"></td>
+                        </td> 
                     </tr>
                 </c:forEach>
-           
         </table>
+     <input type="submit" value="Cancel" name="action">
+     <input type="submit" value="Edit" name="action">
+     <input type="submit" value="Remove" name="action">
 </form> 
 
     </body>

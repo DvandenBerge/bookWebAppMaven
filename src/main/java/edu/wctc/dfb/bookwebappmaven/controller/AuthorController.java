@@ -1,9 +1,8 @@
 package edu.wctc.dfb.bookwebappmaven.controller;
 
+import edu.wctc.dfb.bookwebappmaven.model.Author;
 import edu.wctc.dfb.bookwebappmaven.model.AuthorService;
 import java.io.IOException;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import javax.inject.Inject;
 import javax.servlet.RequestDispatcher;
@@ -51,21 +50,24 @@ public class AuthorController extends HttpServlet {
                 case "view":
                     destPage = "/authorList.jsp";
                     break;
-                case "delete":
-                    destPage="/deleteList.jsp";
-                    break;
                 case "update": 
                      destPage = "/editList.jsp";
                     break;
-                case "create":
-                    destPage = "";
+                case "new":
+                    destPage = "/createAuthor.jsp";
                     break;
-                case "editAuthor":
+                case "Create":
+                    String name=request.getParameter("authorName");
+                    authorService.createAuthor(name);
+                    destPage="/authorList.jsp";
+                    break;
+                case "Edit":
                      String[] authorIdToEdit=request.getParameterValues("authorID");
-                     request.setAttribute("authorToEdit", authorService.getAuthorList().get(Integer.parseInt(authorIdToEdit[0])-1)) ;
+                     Author authorToEdit = authorService.findAuthorById(Integer.parseInt(authorIdToEdit[0]));
+                     request.setAttribute("authorToEdit",authorToEdit) ;
                     destPage="/editAuthor.jsp";
                     break;
-                case "deleteAuthor":
+                case "Remove":
                     String[] authorIdToDelete=request.getParameterValues("authorID");
                     authorService.deleteAuthorById(authorIdToDelete[0]);
                     destPage="/authorList.jsp";
@@ -73,8 +75,14 @@ public class AuthorController extends HttpServlet {
                 case "Save":
                     String newName=request.getParameter("authorName");
                     int authorId=Integer.parseInt(request.getParameter("authorId"));
-                    editEntry(authorId,newName);
+                    authorService.updateAuthor(authorId,newName);
                     destPage="/authorList.jsp";
+                    break;
+                case "Cancel":
+                    destPage="/index.html";
+                    break;
+                default:
+                    destPage="/index.html";
                     break;
             }
 
@@ -104,13 +112,7 @@ public class AuthorController extends HttpServlet {
         password = getServletContext().getInitParameter("db.password");
     }
 
-private void editEntry(int id, String name) throws SQLException,Exception{
-        ArrayList a=new ArrayList();
-        ArrayList b=new ArrayList();
-        a.add("author_name");
-        b.add(name);
-        authorService.updateAuthor("author", a,b, "author_id" , id , false);
-    }
+
     
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**

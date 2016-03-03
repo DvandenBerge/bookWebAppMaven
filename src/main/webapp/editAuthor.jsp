@@ -13,6 +13,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="styles.css">
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Edit Author</title>
     </head>
@@ -21,6 +22,7 @@
         <form action="AuthorController" method="POST">
         <input type="text" value="${authorToEdit.getAuthorId()}" name="authorId" readonly/>
         <input type="text" value="${authorToEdit.getAuthorName()}" name="authorName" />
+        <input type="submit" value="Cancel" name="action">
         <input type="submit" value="Save" name="action">
         </form>
     </body>
