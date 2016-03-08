@@ -73,22 +73,22 @@ public class MySqlDBStrategy implements DBStrategy{
     public void createRecord(String tableName, List<Object> columns, List<Object> values) throws SQLException {
         StringBuilder sb = new StringBuilder("INSERT INTO " + tableName + " (");
         for (Object col : columns) {
-            sb.append(col.toString()).append(",");
+            sb.append(col).append(",");
         }
-       
-        sb = sb.deleteCharAt(sb.length() - 1);  //delete end comma
+        //delete end comma
+        sb = sb.deleteCharAt(sb.length() - 1);
         sb.append(") VALUES (");
         for (Object val : values) {
             sb.append("?,");
         }
-    
-        sb = sb.deleteCharAt(sb.length() - 1);    //delete end comma
+        //delete end comma
+        sb = sb.deleteCharAt(sb.length() - 1);
         sb.append(")");
 
         PreparedStatement pStmt = connection.prepareStatement(sb.toString());
 
-        for (int i = 0; i <values.size(); i++) {
-            pStmt.setObject(i+1 , values.get(i));
+        for (int i = 0; i < values.size(); i++) {
+            pStmt.setObject(i + 1, values.get(i));
         }
 
         pStmt.executeUpdate();

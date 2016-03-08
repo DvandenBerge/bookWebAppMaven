@@ -22,6 +22,11 @@ public class AuthorService implements Serializable {
         return authorDAO.getAuthorList();
     }
     
+    private  void editEntry(String tableName, List colDescriptors, List colValues,
+                             String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception{
+       authorDAO.updateRecordById(tableName, colDescriptors, colValues, whereField, whereValue, closeConnection);
+    }
+    
     public void createAuthor(Object value) throws ClassNotFoundException,SQLException{
         authorDAO.createAuthor(value);
     }
@@ -38,11 +43,6 @@ public class AuthorService implements Serializable {
        editEntry("author", a,b, "author_id" , id , true);
     }
     
-        private  void editEntry(String tableName, List colDescriptors, List colValues,
-                             String whereField, Object whereValue, boolean closeConnection) throws SQLException, Exception{
-       authorDAO.updateRecordById(tableName, colDescriptors, colValues, whereField, whereValue, closeConnection);
-    }
-        
     public Author findAuthorById(int authorID) throws SQLException,ClassNotFoundException{
         return authorDAO.findAuthorById(authorID);
     }

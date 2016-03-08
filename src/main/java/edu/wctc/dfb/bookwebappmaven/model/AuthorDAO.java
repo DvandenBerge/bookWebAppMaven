@@ -24,7 +24,7 @@ public class AuthorDAO implements AuthorDAOStrategy,Serializable {
     private String username;
     
     private final String TABLE_NAME="author";
-    private final String PK_NAME="author_id";
+    private final String COLUMN_NAME="author_id";
     private final int RESULTS_TO_RETURN=-1;
     private final String NULL_STRING_ENTRY ="NOT ENTERED";
     
@@ -49,7 +49,7 @@ public class AuthorDAO implements AuthorDAOStrategy,Serializable {
         for(Map record:rawData){
             Author a=new Author();
             
-            Integer id=new Integer(record.get(PK_NAME).toString());
+            Integer id=new Integer(record.get("author_id").toString());
             a.setAuthorId(id);
             String name=(record.get("author_name")!=null?record.get("author_name").toString():NULL_STRING_ENTRY);
             a.setAuthorName(name);
@@ -65,9 +65,9 @@ public class AuthorDAO implements AuthorDAOStrategy,Serializable {
     public Author findAuthorById(int authorID) throws SQLException,ClassNotFoundException{
         db.openConnection(driver, url, username, password);
         
-        Map<String,Object> rawRec = db.findRecordById(TABLE_NAME, PK_NAME, authorID);
+        Map<String,Object> rawRec = db.findRecordById("author", "author_id", authorID);
         Author author = new Author();
-        author.setAuthorId((Integer)rawRec.get(PK_NAME));
+        author.setAuthorId((Integer)rawRec.get("author_id"));
         author.setAuthorName(rawRec.get("author_name").toString());
         author.setDateAdded((Date)rawRec.get("date_added"));
         db.closeConnection();
@@ -92,7 +92,7 @@ public class AuthorDAO implements AuthorDAOStrategy,Serializable {
     @Override
     public int deleteAuthorById(Object value) throws ClassNotFoundException, SQLException{
         db.openConnection(driver,url,username,password);
-        int returnValue=db.deleteRecordById(TABLE_NAME,PK_NAME,value);
+        int returnValue=db.deleteRecordById(TABLE_NAME,COLUMN_NAME,value);
         db.closeConnection();
         return returnValue;
     }
