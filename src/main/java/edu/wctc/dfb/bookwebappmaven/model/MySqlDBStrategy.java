@@ -26,21 +26,22 @@ public class MySqlDBStrategy implements DBStrategy{
         
          public MySqlDBStrategy(){
          }
-            
+    
+         @Override
+    public final void openConnection(DataSource ds) throws Exception {
+        try {
+            this.connection = ds.getConnection();
+        } catch (SQLException ex) {
+            throw new Exception(ex.getMessage(),ex.getCause());
+        }
+    }
         @Override
         public void openConnection(String driverName,String url,String username, String password) throws ClassNotFoundException,SQLException{
            Class.forName(driverName);
            this.connection=DriverManager.getConnection(url, username, password);
         }
         
-    
-    public final void openConnection(DataSource ds) throws Exception {
-        try {
-            connection = ds.getConnection();
-        } catch (SQLException ex) {
-            throw new Exception(ex.getMessage(),ex.getCause());
-        }
-    }
+
         
         @Override
         public void closeConnection() throws SQLException{

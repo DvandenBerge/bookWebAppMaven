@@ -30,7 +30,7 @@
     </context-param>
      <context-param>
         <param-name>db.jndi.name</param-name>
-        <param-value>jdbc/book</param-value>
+        <param-value>jdbc/books</param-value>
     </context-param>
     
     <session-config>

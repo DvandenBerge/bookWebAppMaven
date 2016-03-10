@@ -109,9 +109,10 @@ public class AuthorController extends HttpServlet {
 
 
     private void configDbConnection() throws NamingException{
-        if (dbJNDIName==null )authorService.getAuthorDAO().initDAO(driver, url, username, password);
+        if (dbJNDIName==null ){authorService.getAuthorDAO().initDAO(driver, url, username, password);}else{
        Context ctx = new InitialContext();
         DataSource ds=(DataSource)ctx.lookup(dbJNDIName);
+        }
     }
     
 

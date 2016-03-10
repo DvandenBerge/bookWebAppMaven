@@ -33,6 +33,11 @@ public class AuthorDAO implements AuthorDAOStrategy,Serializable {
     public AuthorDAO(){
     }
     
+         @Override
+     public void initDAO(DataSource d) throws Exception{
+         this.ds=d;
+     }
+     
     @Override
      public void initDAO(String driver,String url,String username,String password){
          setDriver(driver);
@@ -41,13 +46,19 @@ public class AuthorDAO implements AuthorDAOStrategy,Serializable {
          setPassword(password);
      }
     
-     public void initDAO(DataSource d) throws Exception{
-         this.ds=d;
-     }
+
      
     @Override
     public List<Author> getAuthorList() throws ClassNotFoundException,SQLException{
-        db.openConnection(driver,url,username,password);
+                if(ds == null) {
+            db.openConnection(driver, url, username, password);
+        } else {
+                    try{
+            db.openConnection(ds);
+                    }catch(Exception e){
+                        System.out.println("DS ERROR");
+                    }
+        }
         
         List authors=new ArrayList();
         List<Map<String,Object>> rawData=db.findAllRecords(TABLE_NAME, RESULTS_TO_RETURN);
@@ -69,7 +80,15 @@ public class AuthorDAO implements AuthorDAOStrategy,Serializable {
     }
     
     public Author findAuthorById(int authorID) throws SQLException,ClassNotFoundException{
-        db.openConnection(driver, url, username, password);
+        if(ds == null) {
+            //db.openConnection(driver, url, username, password);
+        } else {
+                    try{
+            db.openConnection(ds);
+                    }catch(Exception e){
+                        System.out.println("DS ERROR");
+                    }
+        }
         
         Map<String,Object> rawRec = db.findRecordById(TABLE_NAME, PK_NAME, authorID);
         Author author = new Author();
@@ -83,7 +102,15 @@ public class AuthorDAO implements AuthorDAOStrategy,Serializable {
     
     @Override
     public void createAuthor(Object value) throws ClassNotFoundException, SQLException{
-        db.openConnection(driver, url, username, password);
+        if(ds == null) {
+           // db.openConnection(driver, url, username, password);
+        } else {
+                    try{
+            db.openConnection(ds);
+                    }catch(Exception e){
+                        System.out.println("DS ERROR");
+                    }
+        }
         ArrayList a=new ArrayList();
         ArrayList b=new ArrayList();
         Date today=new Date();
@@ -97,7 +124,15 @@ public class AuthorDAO implements AuthorDAOStrategy,Serializable {
     
     @Override
     public int deleteAuthorById(Object value) throws ClassNotFoundException, SQLException{
-        db.openConnection(driver,url,username,password);
+       if(ds == null) {
+            //db.openConnection(driver, url, username, password);
+        } else {
+                    try{
+            db.openConnection(ds);
+                    }catch(Exception e){
+                        System.out.println("DS ERROR");
+                    }
+        }
         int returnValue=db.deleteRecordById(TABLE_NAME,PK_NAME,value);
         db.closeConnection();
         return returnValue;
@@ -106,7 +141,15 @@ public class AuthorDAO implements AuthorDAOStrategy,Serializable {
     @Override
     public void updateRecordById(String tableName, List colDescriptors, List colValues,
                              String whereField, Object whereValue, boolean closeConnection)throws SQLException, Exception{
-         db.openConnection(driver,url,username,password);
+         if(ds == null) {
+            //db.openConnection(driver, url, username, password);
+        } else {
+                    try{
+            db.openConnection(ds);
+                    }catch(Exception e){
+                        System.out.println("DS ERROR");
+                    }
+        }
          db.updateRecordById(TABLE_NAME, colDescriptors, colValues, whereField, whereValue, closeConnection);
          db.closeConnection();
     }
