@@ -4,6 +4,7 @@ package edu.wctc.dfb.bookwebappmaven.model;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
+import javax.sql.DataSource;
 
 /**
  *
@@ -18,4 +19,5 @@ public interface DBStrategy {
     public abstract int updateRecordById(String tableName, List colDescriptors, List colValues,String whereField, 
                 Object whereValue, boolean closeConnection) throws SQLException, Exception;
     public abstract Map<String,Object> findRecordById(String table, String pkField, Object value) throws SQLException;
+     public abstract void openConnection(DataSource ds) throws Exception ;
 }

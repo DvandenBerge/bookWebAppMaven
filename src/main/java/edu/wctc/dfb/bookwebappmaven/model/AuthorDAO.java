@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 import javax.enterprise.context.Dependent;
 import javax.inject.Inject;
+import javax.sql.DataSource;
 
 /**
  *
@@ -22,6 +23,7 @@ public class AuthorDAO implements AuthorDAOStrategy,Serializable {
     private String url;
     private String password;
     private String username;
+    private DataSource ds;
     
     private final String TABLE_NAME="author";
     private final String PK_NAME="author_id";
@@ -39,6 +41,10 @@ public class AuthorDAO implements AuthorDAOStrategy,Serializable {
          setPassword(password);
      }
     
+     public void initDAO(DataSource d) throws Exception{
+         this.ds=d;
+     }
+     
     @Override
     public List<Author> getAuthorList() throws ClassNotFoundException,SQLException{
         db.openConnection(driver,url,username,password);
@@ -138,6 +144,13 @@ public class AuthorDAO implements AuthorDAOStrategy,Serializable {
     }
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public DataSource getDs() {
+        return ds;
+    }
+    public void setDs(DataSource ds) {
+        this.ds = ds;
     }
     
     

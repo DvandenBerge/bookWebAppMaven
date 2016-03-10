@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import javax.enterprise.context.Dependent;
+import javax.sql.DataSource;
 
 /**
  *
@@ -31,6 +32,15 @@ public class MySqlDBStrategy implements DBStrategy{
            Class.forName(driverName);
            this.connection=DriverManager.getConnection(url, username, password);
         }
+        
+    
+    public final void openConnection(DataSource ds) throws Exception {
+        try {
+            connection = ds.getConnection();
+        } catch (SQLException ex) {
+            throw new Exception(ex.getMessage(),ex.getCause());
+        }
+    }
         
         @Override
         public void closeConnection() throws SQLException{

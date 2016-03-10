@@ -5,12 +5,16 @@ import edu.wctc.dfb.bookwebappmaven.model.AuthorService;
 import java.io.IOException;
 import java.util.List;
 import javax.inject.Inject;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
 
 /**
  *
@@ -26,6 +30,7 @@ public class AuthorController extends HttpServlet {
     private String url;
     private String username;
     private String password;
+    private String dbJNDIName;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -37,13 +42,13 @@ public class AuthorController extends HttpServlet {
      * @throws IOException if an I/O error occurs
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException{
         response.setContentType("text/html;charset=UTF-8");
 
-        //Helper method to initiate a db connection
-        configDbConnection();
+       
 
-        try {
+        try { //Helper method to initiate a db connection
+        configDbConnection();
             String destPage = "";
             String action = request.getParameter("action");
             switch (action) {
@@ -93,23 +98,31 @@ public class AuthorController extends HttpServlet {
             RequestDispatcher dispatcher = getServletContext().getRequestDispatcher(destPage);
             dispatcher.forward(request, response);
 
-        } catch (Exception e) {
+        } catch(NamingException e ){
+            
+        }catch (Exception e) {
             System.out.println("Fatal Error");
             e.printStackTrace();
         }
 
     }
 
-    private void configDbConnection() {
-        authorService.getAuthorDAO().initDAO(driver, url, username, password);
+
+    private void configDbConnection() throws NamingException{
+        if (dbJNDIName==null )authorService.getAuthorDAO().initDAO(driver, url, username, password);
+       Context ctx = new InitialContext();
+        DataSource ds=(DataSource)ctx.lookup(dbJNDIName);
     }
+    
 
     @Override
     public void init() throws ServletException {
-        driver = getServletContext().getInitParameter("db.driver.class");
-        url = getServletContext().getInitParameter("db.url");
-        username = getServletContext().getInitParameter("db.username");
-        password = getServletContext().getInitParameter("db.password");
+       // driver = getServletContext().getInitParameter("db.driver.class");
+        //url = getServletContext().getInitParameter("db.url");
+        //username = getServletContext().getInitParameter("db.username");
+        //password = getServletContext().getInitParameter("db.password");
+        dbJNDIName=getServletContext().getInitParameter("db.jndi.name");
+        
     }
 
 
@@ -125,7 +138,7 @@ public class AuthorController extends HttpServlet {
      */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException{
         processRequest(request, response);
     }
 
@@ -139,7 +152,7 @@ public class AuthorController extends HttpServlet {
      */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
+            throws ServletException, IOException{
         processRequest(request, response);
     }
 

@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import javax.enterprise.context.Dependent;
 import javax.enterprise.inject.Alternative;
+import javax.sql.DataSource;
 
 /**
  *
@@ -15,6 +16,11 @@ import javax.enterprise.inject.Alternative;
 @Alternative
 @Dependent
 public class MockAuthorDAO implements AuthorDAOStrategy {
+
+    @Override
+    public void initDAO(DataSource ds) throws Exception {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
     @Override
     public void initDAO(String driver, String url, String username, String password) {

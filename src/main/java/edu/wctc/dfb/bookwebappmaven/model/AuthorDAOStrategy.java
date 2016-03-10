@@ -7,6 +7,7 @@ package edu.wctc.dfb.bookwebappmaven.model;
 
 import java.sql.SQLException;
 import java.util.List;
+import javax.sql.DataSource;
 
 /**
  *
@@ -27,7 +28,7 @@ public interface AuthorDAOStrategy {
              
     
      public abstract void initDAO(String driver,String url,String username,String password);
-     
+     public abstract void initDAO(DataSource ds)throws Exception;
      
     public abstract void setPassword(String password);
     public abstract void setUrl(String url);
